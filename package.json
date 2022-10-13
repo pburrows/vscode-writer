@@ -1,0 +1,159 @@
+{
+  "name": "vscode-writer",
+  "displayName": "vscode-writer",
+  "description": "Tools for writers and authors working in VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.71.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:vscode-writer.helloWorld",
+    "onView:vs-writer.contents.contentsView",
+    "onView:vs-writer.statistics.statisticsView",
+    "onLanguage:markdown"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "type": "tree",
+          "id": "vs-writer.contents.contentsView",
+          "name": "Contents"
+        },
+        {
+          "type": "webview",
+          "id": "vs-writer.statistics.statisticsView",
+          "name": "Project Statistics"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "vscode-writer.helloWorld",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "vs-writer.editors.setSectionName",
+          "when": "view == vs-writer.contents.contentsView"
+        },
+        {
+          "command": "vs-writer.editors.setSectionPointOfView",
+          "when": "view == vs-writer.contents.contentsView"
+        },
+        {
+          "submenu": "vs-writer.editors.setTypeSubMenu",
+          "when": "view == vs-writer.contents.contentsView"
+        },
+        {
+          "submenu": "vs-writer.contents.setOrderSubMenu",
+          "when": "view == vs-writer.contents.contentsView"
+        }
+      ],
+      "vs-writer.editors.setTypeSubMenu": [
+        {
+          "command": "vs-writer.editors.setSectionType.Chapter"
+        },
+        {
+          "command": "vs-writer.editors.setSectionType.Section"
+        },
+        {
+          "command": "vs-writer.editors.setSectionType.Part"
+        }
+      ],
+      "vs-writer.contents.setOrderSubMenu": [
+        {
+          "command": "vs-writer.contents.setOrder.MoveUp"
+        },
+        {
+          "command": "vs-writer.contents.setOrder.MoveDown"
+        }
+      ]
+    },
+    "submenus": [
+      {
+        "label": "Set Type",
+        "id": "vs-writer.editors.setTypeSubMenu"
+      },
+      {
+        "label": "Order",
+        "id": "vs-writer.contents.setOrderSubMenu"
+      }
+    ],
+    "commands": [
+      {
+        "command": "vscode-writer.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "vs-writer.editors.setSectionName",
+        "title": "Set Name"
+      },
+      {
+        "command": "vs-writer.editors.setSectionPointOfView",
+        "title": "Set Point of View Character"
+      },
+      {
+        "command": "vs-writer.editors.setSectionType.Chapter",
+        "title": "Chapter"
+      },
+      {
+        "command": "vs-writer.editors.setSectionType.Section",
+        "title": "Section"
+      },
+      {
+        "command": "vs-writer.editors.setSectionType.Part",
+        "title": "Part"
+      },
+      {
+        "command": "vs-writer.contents.setOrder.MoveUp",
+        "title": "Move Up"
+      },
+      {
+        "command": "vs-writer.contents.setOrder.MoveDown",
+        "title": "Move Down"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.71.0",
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "16.x",
+    "@typescript-eslint/eslint-plugin": "^5.38.1",
+    "@typescript-eslint/parser": "^5.38.1",
+    "eslint": "^8.24.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.0.0",
+    "typescript": "^4.8.4",
+    "ts-loader": "^9.4.1",
+    "webpack": "^5.74.0",
+    "webpack-cli": "^4.10.0",
+    "@vscode/test-electron": "^2.1.5"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "wink-eng-lite-model": "https://github.com/winkjs/wink-eng-lite-model/releases/download/1.3.1/wink-eng-lite-model-1.3.1.tgz",
+    "wink-nlp": "^1.12.0",
+    "wink-nlp-utils": "^2.0.7",
+    "wink-tokenizer": "^5.3.0"
+  }
+}
