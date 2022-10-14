@@ -1,6 +1,6 @@
 import { VswFileSettings, VswFolderSetting } from './../models';
 
-import { CancellationToken, Command, commands, Event, EventEmitter, ExtensionContext, ProviderResult, Range, Selection, TextDocument, TextDocumentChangeEvent, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
+import { CancellationToken, Command, commands, Event, EventEmitter, ExtensionContext, ProviderResult, Range, Selection, TextDocument, TextDocumentChangeEvent, ThemeColor, ThemeIcon, TreeDataProvider, TreeItem, TreeItemCollapsibleState, Uri, window, workspace } from "vscode";
 import * as fs from 'fs';
 import * as path from 'path';
 import matter = require("gray-matter");
@@ -12,21 +12,20 @@ import { Document } from 'wink-nlp';
 export function activate(context: ExtensionContext, rootPath: string) {
     const contentsView = new ContentsViewProvider(rootPath);
     window.registerTreeDataProvider('vs-writer.contents.contentsView', contentsView);
-    
 }
 
 export class ContentsViewProvider implements TreeDataProvider<ContentsViewItem> {
     workspaceRoot;
     private _onDidChangeTreeData: EventEmitter<ContentsViewItem | undefined | void> = new EventEmitter<ContentsViewItem | undefined | void>();
-	readonly onDidChangeTreeData: Event<ContentsViewItem | undefined | void> = this._onDidChangeTreeData.event;
+    readonly onDidChangeTreeData: Event<ContentsViewItem | undefined | void> = this._onDidChangeTreeData.event;
     constructor(rootPath: string) {
         this.workspaceRoot = rootPath;
-        workspace.onDidSaveTextDocument(e=> this.documentSaved(e));
-    }    
+        workspace.onDidSaveTextDocument(e => this.documentSaved(e));
+    }
 
     documentSaved(doc: TextDocument) {
         this._onDidChangeTreeData.fire();
-        
+
     }
 
     getTreeItem(element: ContentsViewItem): TreeItem | Thenable<TreeItem> {
@@ -107,6 +106,25 @@ export class ContentsViewProvider implements TreeDataProvider<ContentsViewItem> 
     }
 }
 
+function getThemeColorFromColorName(name: string): ThemeColor {
+    switch (name) {
+        case 'red':
+            return new ThemeColor('charts.red');
+        case 'blue':
+            return new ThemeColor('charts.blue');
+        case 'yellow':
+            return new ThemeColor('charts.yellow');
+        case 'orange':
+            return new ThemeColor('charts.orange');
+        case 'green':
+            return new ThemeColor('charts.green');
+        case 'purple':
+            return new ThemeColor('charts.purple');
+        default:
+            return new ThemeColor('charts.foreground');
+    }
+}
+
 export class ContentsViewItem extends TreeItem implements ContentItemInfo {
     type: VswFileType = VswFileType.section;
     order: number = 0;
@@ -125,18 +143,24 @@ export class ContentsViewItem extends TreeItem implements ContentItemInfo {
         item.order = order;
         item.path = filePath;
         item.pov = fileInfo.pov;
-        item.iconPath = new ThemeIcon('markdown');
+        // item.command = {title: 'open', command: 'vs-writer.contents.openFile'};
+        const iconColor = getThemeColorFromColorName(fileInfo.flag ?? '');
+        item.iconPath = new ThemeIcon('note', iconColor);
         switch (item.type) {
             case VswFileType.chapter:
-                item.iconPath = new ThemeIcon('markdown');
+                item.iconPath = new ThemeIcon('output', iconColor);
                 break;
             case VswFileType.section:
+                item.iconPath = new ThemeIcon('note', iconColor);
                 break;
             case VswFileType.part:
+                item.iconPath = new ThemeIcon('notebook', iconColor);
+                break;
             case VswFileType.frontMatter:
+            case VswFileType.backMatter:
             case VswFileType.folder:
             default:
-                item.iconPath = new ThemeIcon('file');
+                item.iconPath = new ThemeIcon('file', iconColor);
                 break;
         }
         return item;
@@ -147,7 +171,7 @@ export class ContentsViewItem extends TreeItem implements ContentItemInfo {
         item.type = VswFileType.folder;
         item.order = order;
         item.path = folderPath;
-        item.iconPath = new ThemeIcon('folder');
+        item.iconPath = new ThemeIcon('folder', getThemeColorFromColorName(''));
         return item;
     }
 

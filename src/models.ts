@@ -20,6 +20,7 @@ export interface VswFileSettings {
     type?: VswFileType;
     name?: string;
     pov?: string;
+    flag?: string;
 }
 
 export enum VswFileType {

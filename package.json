@@ -34,27 +34,51 @@
     "menus": {
       "view/title": [
         {
-          "command": "vscode-writer.helloWorld",
+          "command": "vs-writer.editors.newFile",
           "when": "view == vs-writer.contents.contentsView",
-          "group": "navigation"
+          "group": "navigation@1"
+        },
+        {
+          "command": "vs-writer.editors.newFolder",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "navigation@2"
+        },
+        {
+          "submenu": "vs-writer.editors.actionsMenu",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "navigation@3"
         }
       ],
       "view/item/context": [
         {
           "command": "vs-writer.editors.setSectionName",
-          "when": "view == vs-writer.contents.contentsView"
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "edit"
         },
         {
           "command": "vs-writer.editors.setSectionPointOfView",
-          "when": "view == vs-writer.contents.contentsView"
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "edit"
         },
         {
           "submenu": "vs-writer.editors.setTypeSubMenu",
-          "when": "view == vs-writer.contents.contentsView"
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "edit"
         },
         {
           "submenu": "vs-writer.contents.setOrderSubMenu",
-          "when": "view == vs-writer.contents.contentsView"
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "order"
+        },
+        {
+          "submenu": "vs-writer.contents.setFlagSubMenu",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "revise"
+        },
+        {
+          "command": "vs-writer.contents.openFile",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "files"
         }
       ],
       "vs-writer.editors.setTypeSubMenu": [
@@ -75,6 +99,64 @@
         {
           "command": "vs-writer.contents.setOrder.MoveDown"
         }
+      ],
+      "vs-writer.contents.setFlagSubMenu": [
+        {
+          "command": "vs-writer.contents.setFlag.Green"
+        },
+        {
+          "command": "vs-writer.contents.setFlag.Red"
+        },
+        {
+          "command": "vs-writer.contents.setFlag.Purple"
+        },
+        {
+          "command": "vs-writer.contents.setFlag.Blue"
+        },
+        {
+          "command": "vs-writer.contents.setFlag.Yellow"
+        },
+        {
+          "command": "vs-writer.contents.setFlag.Orange"
+        }
+      ],
+      "vs-writer.editors.actionsMenu": [
+        {
+          "command": "vs-writer.publish.publishToMarkdown",
+          "group": "Publish"
+        },
+        {
+          "command": "vs-writer.publish.publishToEpub",
+          "group": "Publish"
+        },
+        {
+          "command": "vs-writer.publish.publishToWord",
+          "group": "Publish"
+        },
+        {
+          "command": "vs-writer.publish.publishToRtf",
+          "group": "Publish"
+        },
+        {
+          "command": "vs-writer.publish.publishToHtml",
+          "group": "Publish"
+        },
+        {
+          "command": "vs-writer.editors.newFile",
+          "group": "Files"
+        },
+        {
+          "command": "vs-writer.editors.newFolder",
+          "group": "Files"
+        },
+        {
+          "command": "vs-writer.editors.newBackMatter",
+          "group": "Files"
+        },
+        {
+          "command": "vs-writer.editors.newFrontMatter",
+          "group": "Files"
+        }
       ]
     },
     "submenus": [
@@ -85,6 +167,15 @@
       {
         "label": "Order",
         "id": "vs-writer.contents.setOrderSubMenu"
+      },
+      {
+        "label": "Flag",
+        "id": "vs-writer.contents.setFlagSubMenu"
+      },
+      {
+        "label": "Menu",
+        "id": "vs-writer.editors.actionsMenu",
+        "icon": "$(menu)"
       }
     ],
     "commands": [
@@ -93,33 +184,121 @@
         "title": "Hello World"
       },
       {
+        "command": "vs-writer.editors.newFile",
+        "title": "New File",
+        "icon": "$(new-file)"
+      },
+      {
+        "command": "vs-writer.editors.newFolder",
+        "title": "New Folder",
+        "icon": "$(new-folder)"
+      },
+      {
         "command": "vs-writer.editors.setSectionName",
+        "category": "Writer",
         "title": "Set Name"
       },
       {
+        "command": "vs-writer.publish.publishToMarkdown",
+        "category": "Writer",
+        "title": "Publish to Markdown"
+      },
+      {
+        "command": "vs-writer.publish.publishToEpub",
+        "category": "Writer",
+        "title": "Publish to EPUB"
+      },
+      {
+        "command": "vs-writer.publish.publishToWord",
+        "category": "Writer",
+        "title": "Publish to Microsoft Word"
+      },
+      {
+        "command": "vs-writer.publish.publishToHtml",
+        "category": "Writer",
+        "title": "Publish to HTML"
+      },
+      {
+        "command": "vs-writer.publish.publishToRtf",
+        "category": "Writer",
+        "title": "Publish to Rich Text Format (RTF)"
+      },
+      {
+        "command": "vs-writer.editors.newFrontMatter",
+        "category": "Writer",
+        "title": "New Front Matter Page"
+      },
+      {
+        "command": "vs-writer.editors.newBackMatter",
+        "category": "Writer",
+        "title": "New Back Matter Page"
+      },
+      {
         "command": "vs-writer.editors.setSectionPointOfView",
-        "title": "Set Point of View Character"
+        "category": "Writer",
+        "title": "Set Point of View"
       },
       {
         "command": "vs-writer.editors.setSectionType.Chapter",
-        "title": "Chapter"
+        "title": "Chapter",
+        "enablement": "view == vs-writer.contents.contentsView"
       },
       {
         "command": "vs-writer.editors.setSectionType.Section",
-        "title": "Section"
+        "title": "Section",
+        "enablement": "view == vs-writer.contents.contentsView"
       },
       {
         "command": "vs-writer.editors.setSectionType.Part",
-        "title": "Part"
+        "title": "Part",
+        "enablement": "view == vs-writer.contents.contentsView"
       },
       {
         "command": "vs-writer.contents.setOrder.MoveUp",
-        "title": "Move Up"
+        "title": "Move Up",
+        "enablement": "view == vs-writer.contents.contentsView"
       },
       {
         "command": "vs-writer.contents.setOrder.MoveDown",
-        "title": "Move Down"
+        "title": "Move Down",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.setFlag.Green",
+        "title": "Green",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.setFlag.Red",
+        "title": "Red",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.setFlag.Blue",
+        "title": "Blue",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.setFlag.Yellow",
+        "title": "Yellow",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.setFlag.Orange",
+        "title": "Orange",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.setFlag.Purple",
+        "title": "Purple",
+        "enablement": "view == vs-writer.contents.contentsView"
+      },
+      {
+        "command": "vs-writer.contents.openFile",
+        "title": "Open",
+        "enablement": "view == vs-writer.contents.contentsView"
       }
+
     ]
   },
   "scripts": {

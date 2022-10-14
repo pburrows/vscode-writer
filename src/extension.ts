@@ -1,3 +1,4 @@
+import { commands } from 'vscode';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
@@ -23,7 +24,9 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from vscode-writer!');
 	});
 
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(disposable,
+		// commands.registerCommand('vs-writer.contents.setFlag.Green', ()=> console.log('Green!'))
+		);
 
 	activateContents(context, rootPath);
 	activateStatistics(context, rootPath);

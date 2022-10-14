@@ -13,10 +13,22 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand('vs-writer.editors.setSectionType.Chapter', (args: any) => setYamlForItem(args, 'type', VswFileType.chapter)),
         commands.registerCommand('vs-writer.editors.setSectionType.Section', (args: any) => setYamlForItem(args, 'type', VswFileType.section)),
         commands.registerCommand('vs-writer.editors.setSectionType.Part', (args: any) => setYamlForItem(args, 'type', VswFileType.part)),
+        commands.registerCommand('vs-writer.contents.setFlag.Purple', (args: any) => setYamlForItem(args, 'flag', "purple")),
+        commands.registerCommand('vs-writer.contents.setFlag.Red', (args: any) => setYamlForItem(args, 'flag', "red")),
+        commands.registerCommand('vs-writer.contents.setFlag.Green', (args: any) => setYamlForItem(args, 'flag', "green")),
+        commands.registerCommand('vs-writer.contents.setFlag.Yellow', (args: any) => setYamlForItem(args, 'flag', "yellow")),
+        commands.registerCommand('vs-writer.contents.setFlag.Orange', (args: any) => setYamlForItem(args, 'flag', "orange")),
+        commands.registerCommand('vs-writer.contents.setFlag.Blue', (args: any) => setYamlForItem(args, 'flag', "blue")),
+        commands.registerCommand('vs-writer.contents.openFile', (args: any) => openItem(args)),
     );
 }
 
-async function setYamlForItem(item: ContentsViewItem, field: string, type?: VswFileType) {
+async function openItem(item: ContentsViewItem) {
+    const uri = Uri.file(item.path);
+    commands.executeCommand('vscode.open', uri, undefined, item.name);
+}
+
+async function setYamlForItem(item: ContentsViewItem, field: string, value?: any) {
     const uri = Uri.file(item.path);
     await window.showTextDocument(uri);
     let editor = window.activeTextEditor;
@@ -34,7 +46,10 @@ async function setYamlForItem(item: ContentsViewItem, field: string, type?: VswF
             }
             break;
         case 'type':
-            config.type = type;
+            config.type = value as VswFileType;
+            break;
+        case "flag":
+            config.flag = value;
             break;
         case 'pov':
             if (!config.pov) {
@@ -47,7 +62,7 @@ async function setYamlForItem(item: ContentsViewItem, field: string, type?: VswF
 
     await ConfigurationHelper.setTextDocumentConfiguration(doc, config);
 
-    if (field !== 'type') {
+    if (field !== 'type' && field !== "flag") {
         const sel = getYamlValueSelection(doc, field + ': ');
         if (sel) {
             editor.selection = sel;
