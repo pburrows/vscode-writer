@@ -79,6 +79,16 @@
           "command": "vs-writer.contents.openFile",
           "when": "view == vs-writer.contents.contentsView",
           "group": "files"
+        },
+        {
+          "command": "vs-writer.editors.newFile",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "files"
+        },
+        {
+          "command": "vs-writer.editors.newFolder",
+          "when": "view == vs-writer.contents.contentsView",
+          "group": "files"
         }
       ],
       "vs-writer.editors.setTypeSubMenu": [

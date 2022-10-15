@@ -20,7 +20,17 @@ export function activate(context: ExtensionContext) {
         commands.registerCommand('vs-writer.contents.setFlag.Orange', (args: any) => setYamlForItem(args, 'flag', "orange")),
         commands.registerCommand('vs-writer.contents.setFlag.Blue', (args: any) => setYamlForItem(args, 'flag', "blue")),
         commands.registerCommand('vs-writer.contents.openFile', (args: any) => openItem(args)),
+        commands.registerCommand('vs-writer.editors.newFolder', (args: any) => newFolder(args)),
+        commands.registerCommand('vs-writer.editors.newFile', (args: any) => newFile(args)),
     );
+}
+
+async function newFile(item: ContentsViewItem) {
+
+}
+
+async function newFolder(item: ContentsViewItem) {
+
 }
 
 async function openItem(item: ContentsViewItem) {
